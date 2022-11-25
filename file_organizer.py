@@ -33,6 +33,12 @@ def CreateMissingPath(path):
 ## end : [CreateMissingPath]
 
 
+def WalkDirectory():
+    pass    
+
+## end : [WalkDirectory]
+
+
 
 def MoveFiles():
     pass
