@@ -4,12 +4,10 @@ import os
 def __main__():
     # main file call
     _file_source = ""
-    _file_source_exists = False
     _file_destination = ""
-    _file_destination_exists = False
+    _log_file = ""
 
-    if (_file_source_exists and _file_destination_exists):
-        pass
+    pass
 
 ## end : [__main__]
 
@@ -28,7 +26,11 @@ def DoesPathExist(path):
 
 
 def CreateMissingPath(path):
-    pass
+    
+    try:
+        os.makedirs(os.path.dirname(path))
+    except:
+        print(f"There was an issue in creating the path {path}")
 
 ## end : [CreateMissingPath]
 
