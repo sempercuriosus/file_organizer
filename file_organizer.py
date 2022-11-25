@@ -48,9 +48,10 @@ def LogToFile(error_text):
 
         try:
             with open (_log_full_path, "a") as file:
-                pass
-        except:
-            pass
+                file.writelines(f"Log File : {_date}")
+                file.writelines(f"error text : {error_text}")
+        except Exception as e:
+            print(f"there was an error writing the log file : {str(e)}")
 
 ## end : [LogToFile]error_text
 
