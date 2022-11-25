@@ -39,6 +39,25 @@ def WalkDirectory():
 ## end : [WalkDirectory]
 
 
+def CheckForSVG():
+    pass
+
+## end : [CheckForSVG]
+
+
+def CheckForPNG():
+    pass
+
+## end : [CheckForPNG]
+
+
+def ExtractFiles():
+    pass
+
+## end : [ExtractFiles]
+
+
+
 
 def MoveFiles():
     pass
