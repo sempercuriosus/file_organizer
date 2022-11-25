@@ -1,13 +1,13 @@
 import os
 import datetime
-
+import shutil
 
 def __main__():
     # main file call
     _file_source = ""
     _file_destination = ""
+    _path_flag = False
 
-    pass
 
 ## end : [__main__]
 
@@ -36,17 +36,31 @@ def CreateMissingPath(path):
 ## end : [CreateMissingPath]
 
 
-def WalkDirectory():
-    pass    
-
+def WalkDirectory(path_to_walk, file_source, file_destination):
+    for dirpath, dnames, fnames in os.walk("./"):
+        for f in fnames:
+            if f.endswith(".svg"):
+                MoveFile(source=file_source, destination=file_destination)
+            elif f.endswith(".png"):
+                MoveFile(source=file_source, destination=file_destination)
 ## end : [WalkDirectory]
 
 
-def CheckForFileType(file_path, file_type):
-    if (file_type.endswith("")):
-        MoveFiles(file_path)
+def JoinPath(file_path, file_name):
+    try:
+        os.path.join(file_path, file_name)
+    except Exception as e:
+        LogToFile(e)
 
-## end : [CheckForFileType]
+## end : [MoveFiles]
+
+def MoveFile(source, destination):
+    try:
+        shutil.move(source, destination) 
+    except Exception as e:
+        LogToFile(e)
+
+## end : [MoveFile]
 
 
 def LogToFile(error_text):
@@ -58,7 +72,7 @@ def LogToFile(error_text):
     
     if (_log_file_name != "" and _log_file_path != ""):
 
-        _log_full_path = os.path.join(_log_file_path, _log_file_name)
+        _log_full_path = JoinPath(_log_file_path, _log_file_name) #os.path.join(_log_file_path, _log_file_name)
 
         try:
             with open (_log_full_path, "a") as file:
@@ -78,22 +92,6 @@ def SetDate():
     return _date_string
 
 ## end : [SetDate]
-
-
-
-def ExtractFiles():
-    pass
-
-## end : [ExtractFiles]
-
-
-def MoveFiles(file_path):
-    try:
-        pass
-    except Exception as e:
-        Log(e)
-
-## end : [MoveFiles]
 
 
 def UnzipFolder():
