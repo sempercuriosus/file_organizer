@@ -13,6 +13,7 @@ def __main__():
 
 ## end : [__main__]
 
+
 def DoesPathExist(path):
     _path_exists = False
 
@@ -39,16 +40,11 @@ def WalkDirectory():
 ## end : [WalkDirectory]
 
 
-def CheckForSVG():
-    pass
+def CheckForFileType(file_path, file_type):
+    if (file_type.endswith("")):
+        MoveFiles(file_path)
 
-## end : [CheckForSVG]
-
-
-def CheckForPNG():
-    pass
-
-## end : [CheckForPNG]
+## end : [CheckForFileType]
 
 
 def ExtractFiles():
@@ -57,10 +53,11 @@ def ExtractFiles():
 ## end : [ExtractFiles]
 
 
-
-
-def MoveFiles():
-    pass
+def MoveFiles(file_path):
+    try:
+        pass
+    except Exception as e:
+        Log(e)
 
 ## end : [MoveFiles]
 
