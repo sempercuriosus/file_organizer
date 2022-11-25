@@ -1,15 +1,13 @@
 import os
+import datetime
 
 
 def __main__():
     # main file call
     _file_source = ""
-    _file_source_exists = False
     _file_destination = ""
-    _file_destination_exists = False
 
-    if (_file_source_exists and _file_destination_exists):
-        pass
+    pass
 
 ## end : [__main__]
 
@@ -29,7 +27,11 @@ def DoesPathExist(path):
 
 
 def CreateMissingPath(path):
-    pass
+    
+    try:
+        os.makedirs(os.path.dirname(path))
+    except:
+        print(f"There was an issue in creating the path {path}")
 
 ## end : [CreateMissingPath]
 
@@ -45,6 +47,38 @@ def CheckForFileType(file_path, file_type):
         MoveFiles(file_path)
 
 ## end : [CheckForFileType]
+
+
+def LogToFile(error_text):
+    _log_file_path = ""
+    _date = SetDate()
+    _log_file_name = ""
+    
+    _log_file_name = f"{_date}_log.txt"
+    
+    if (_log_file_name != "" and _log_file_path != ""):
+
+        _log_full_path = os.path.join(_log_file_path, _log_file_name)
+
+        try:
+            with open (_log_full_path, "a") as file:
+                file.writelines(f"Log File : {_date}")
+                file.writelines(f"error text : {error_text}")
+        except Exception as e:
+            print(f"there was an error writing the log file : {str(e)}")
+
+## end : [LogToFile]error_text
+
+
+def SetDate():  
+    _year = datetime.now().year
+    _month = datetime.now().month
+    _date_string = f"{_year}_{_month}"
+
+    return _date_string
+
+## end : [SetDate]
+
 
 
 def ExtractFiles():
