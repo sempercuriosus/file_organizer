@@ -11,6 +11,7 @@ def __main__():
 
 ## end : [__main__]
 
+
 def DoesPathExist(path):
     _path_exists = False
 
@@ -33,6 +34,19 @@ def CreateMissingPath(path):
         print(f"There was an issue in creating the path {path}")
 
 ## end : [CreateMissingPath]
+
+
+def WalkDirectory():
+    pass    
+
+## end : [WalkDirectory]
+
+
+def CheckForFileType(file_path, file_type):
+    if (file_type.endswith("")):
+        MoveFiles(file_path)
+
+## end : [CheckForFileType]
 
 
 def LogToFile(error_text):
@@ -67,8 +81,17 @@ def SetDate():
 
 
 
-def MoveFiles():
+def ExtractFiles():
     pass
+
+## end : [ExtractFiles]
+
+
+def MoveFiles(file_path):
+    try:
+        pass
+    except Exception as e:
+        Log(e)
 
 ## end : [MoveFiles]
 
