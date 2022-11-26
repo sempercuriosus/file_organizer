@@ -2,11 +2,25 @@ import os
 from datetime import datetime
 import shutil
 from zipfile import ZipFile
+import json
+
+
+__file_source = ""
+__file_desination = ""
+__log_file_path = ""
+
+
 
 def __main__():
     # main file call
     _file_source = ""
     _file_destination = ""
+
+    GetSettings()
+
+    print(__file_source)
+    print(__file_desination)
+    print(__log_file_path)
 
     DoesPathExist(_file_source)
     DoesPathExist(_file_destination)
@@ -19,12 +33,25 @@ def __main__():
 
 
 def GetSettings():
-    _file_source = ""
-    _file_desination = ""
-    _Log_file_path = ""
+    __file_source = ""
+    __file_desination = ""
+    __log_file_path = ""
+
+    try:
+        with open("./configurations/appsettings.json", "r") as config_file:
+            config = json.loads(config_file)
+            _file_source = config["settings"][1]["Source_Path"]
+            _file_desination = config["settings"][1]["Target_Path"]
+            _log_file_path = config["settings"][1]["Source_Path"]
+
+            LogToFile("Loaded configuration file.")
+
+    except Exception as e:
+        LogToFile("There was an error in loading the configuration file.")
+        LogToFile(e)
+
 
 ## end : [GetSettings]
-
 
 
 def DoesPathExist(path):
@@ -47,8 +74,8 @@ def CreateMissingPath(path):
 ## end : [CreateMissingPath]
 
 
-def LogToFile(error_text):
-    _log_file_path = "/Users/erichulse/Projects/file_organizer/logs"
+def LogToFile(text_to_write):
+    _log_file_path = ""
     _date = SetDate()
     _log_file_name = f"{_date}_log.txt"
     
@@ -61,7 +88,7 @@ def LogToFile(error_text):
                 file.writelines("= = = = = = = = = = = = = = = = = = = = =")
                 file.writelines('\n')
                 file.writelines(f"Log File : {_date}")
-                file.writelines(f"error text : {error_text}")
+                file.writelines(f"error text : {text_to_write}")
                 file.writelines('\n')
                 file.writelines("= = = = = = = = = = = = = = = = = = = = =")
                 file.writelines('\n')
