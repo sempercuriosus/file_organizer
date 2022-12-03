@@ -125,6 +125,7 @@ def CheckPathExists(path):
 
 def CreateMissingPath(path):
     try:
+        os.makedirs(path)
         LogToFile(log_type="text",log_title="Path Created",text_to_write=path, log_called_by="CreateMissingPath")
     except FileExistsError as _file_exists:
         LogToFile(log_type="error",log_title="File Exists Exception",text_to_write=_file_exists, log_called_by="CreateMissingPath", additional_lines=path)
