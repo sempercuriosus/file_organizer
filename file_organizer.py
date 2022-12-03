@@ -39,18 +39,18 @@ def __main__():
 
     if ((Settings.config("file_source") != "") and (Settings.config("file_destination") != "") and (Settings.config("log_path") != "")):
 
-        DoesPathExist(Settings.config("file_source"))
-        DoesPathExist(Settings.config("file_destination"))
+        CheckPathExists(Settings.config("file_source"))
+        CheckPathExists(Settings.config("file_destination"))
 
         IsPathZipped(path=Settings.config("file_source"))
 
         WalkDirectory(file_source=Settings.config("file_source"), file_destination=Settings.config("file_destination"))
 
+        LogToFile(log_type="text", log_title="Script End", text_to_write="The script completed.", log_called_by="__main__")
 ## end : [__main__]
 
 
 def GetSettings():
-
     try:
         with open("./configurations/appsettings.json", "r") as config_file:
             text = config_file.read()
@@ -63,37 +63,16 @@ def GetSettings():
             Settings.set("file_destination", _file_desination) 
             Settings.set("log_path", _log_file_path)
             
-            LogToFile("Loaded configuration file.")
+            LogToFile(log_type="text", log_title="Configuration Successful", text_to_write="Loaded configuration file.", log_called_by="GetSettings")
 
     except Exception as e:
-        LogToFile("There was an error in loading the configuration file.")
-        LogToFile(e)
+        LogToFile(log_type="text", log_title="Configuration Error", text_to_write="There was an error in loading the configuration file : ", log_called_by="GetSettings()")
+        LogToFile(log_type="e", log_title="Configuration Error", text_to_write=f"{e}", log_called_by="GetSettings()")
 
 
 ## end : [GetSettings]
 
-
-def DoesPathExist(path):
-    if (not(os.path.exists(path))):
-        LogToFile(f"The location [{path}] does not exist.")
-        CreateMissingPath(path)
-
-## end : [DoesPathExist]
-
-
-def CreateMissingPath(path):
-    
-    try:
-        os.makedirs(os.path.dirname(path))
-        LogToFile(f"The path was missing and then created : {path}")
-    except Exception as e:
-        # print(f"There was an issue in creating the path {path}")
-        LogToFile(e)
-
-## end : [CreateMissingPath]
-
-
-def LogToFile(text_to_write):
+def LogToFile(log_type, log_title, text_to_write, log_called_by, additional_lines=""):
     # _log_file_path = ""
     _date = SetDate()
     _log_file_name = f"{_date}_log.txt"
@@ -102,22 +81,58 @@ def LogToFile(text_to_write):
 
         _log_full_path = JoinPath(Settings.config("log_path"), _log_file_name) 
 
+        if log_type == "e" or log_type == "error":
+            log_title = "Error !!!"
+
+        # if additional_lines != "":
+        #     _additional_lines_header = ""
+
         try:
             with open (str(_log_full_path), "a") as file:
                 file.writelines("= = = = = = = = = = = = = = = = = = = = =")
                 file.writelines('\n')
                 file.writelines(f"Log File : {_date}")
                 file.writelines('\n')
-                file.writelines(f"text : {text_to_write}")
+                file.writelines("- - - - -")
+                file.writelines('\n')
+                file.writelines(f"[{str(log_title)}] : {str(log_called_by)}")
+                file.writelines('\n')
+                file.writelines(f"{str(text_to_write)}")
+                file.writelines('\n')
+                file.writelines(f"Additional Note : ")
+                file.writelines('\n')
+                file.writelines(f"{additional_lines}")
+                file.writelines('\n')
+                file.writelines(f"Log File : End")
                 file.writelines('\n')
                 file.writelines("= = = = = = = = = = = = = = = = = = = = =")
                 file.writelines('\n')
                 file.writelines('\n')
 
         except Exception as e:
-            LogToFile(f"there was an error writing the log file : {str(e)}")
+            print(f"there was an error writing the log file : {str(e)}")
 
 ## end : [LogToFile]error_text
+
+
+def CheckPathExists(path):
+    if (not(os.path.exists(path))):
+        LogToFile(log_type="text", log_title="Path Exists", text_to_write=f"The location [{path}] does not exist.", log_called_by="CheckPathExists")
+        CreateMissingPath(path)
+
+## end : [CheckPathExists]
+
+
+def CreateMissingPath(path):
+    try:
+        os.makedirs(path)
+        LogToFile(log_type="text",log_title="Path Created",text_to_write=path, log_called_by="CreateMissingPath", additional_lines="Path created.")
+    except FileExistsError as _file_exists:
+        LogToFile(log_type="error",log_title="File Exists Exception",text_to_write=_file_exists, log_called_by="CreateMissingPath")
+    except Exception as e:
+        LogToFile(log_type="error",log_title="Missing Path Exception",text_to_write=e, log_called_by="CreateMissingPath")
+
+## end : [CreateMissingPath]
 
 
 def SetDate():  
@@ -148,7 +163,7 @@ def JoinPath(file_path, file_name):
     try:
        _joined_path = os.path.join(file_path, file_name)
     except Exception as e:
-        LogToFile(e)
+        LogToFile(log_type="error",log_title="Path Join Error", text_to_write=e, log_called_by="JoinPath")
     
     return _joined_path
 
@@ -159,7 +174,8 @@ def MoveFile(source, destination):
     try:
         shutil.move(source, destination) 
     except Exception as e:
-        LogToFile(e)
+        LogToFile(log_type="error", log_title="Move File Exception", text_to_write=f"Could not move the file : {source}", log_called_by="MoveFile")
+        # LogToFile(e)
 
 ## end : [MoveFile]
 
@@ -176,9 +192,14 @@ def IsPathZipped(path):
 def UnzipFolder(path):
     try:
         with ZipFile (path) as _zip:
+            LogToFile(log_type="text", log_title="Unzip Start", text_to_write=f"path was zipped : {path}", log_called_by="UnzipFolder")
             _zip.extractall(path=path)
+            LogToFile(log_type="text", log_title="Unzip End", text_to_write="path was unzipped.", log_called_by="UnzipFolder")
+
     except Exception as e:
-        LogToFile(e)
+        LogToFile(log_type="error",log_title="Unzip Error", text_to_write=f"could not extract files at : {path}", log_called_by="UnzipFolder")
+
+        LogToFile(log_type="error",log_title="Error Details",text_to_write=e, log_called_by="UnzipFolder")
 
 ## end : [UnzipFolder]
 
