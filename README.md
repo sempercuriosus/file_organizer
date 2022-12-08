@@ -1,9 +1,9 @@
 ## Read Me
-----
 
-Auth.............sempercuriosus
+Author : sempercuriosus
 
-Last Update......08Dec2022
+Last Update : 08Dec2022
+
 ----
 
 ## About the Program
