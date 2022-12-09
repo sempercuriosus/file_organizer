@@ -33,6 +33,8 @@ def __main__():
 
     GetSettings()
 
+    LogToFile(log_type="text", log_title="Script Start", log_text="The script is starting.", log_called_by="__main__")
+
     # print(Settings.config("file_source"))
     # print(Settings.config("file_destination"))
     # print(Settings.config("log_path"))
@@ -145,16 +147,20 @@ def LogToFile(log_type, log_title, log_text, log_called_by, additional_lines="")
 ## end : [LogToFile]error_text
 
 def SetDefaultLogPath():
-    _default_log_path = ""
 
-    _default_log_path = os.getcwd()
+    try:
+        LogToFile(log_type="text", log_title="Log Path Missing", log_text="The Log file path was not set.", log_called_by="SetDefaultLogPath")
 
-    _default_log_path = JoinPath(_default_log_path, "logs")
+        _default_log_path = ""
+
+        _default_log_path = os.getcwd()
+
+        _default_log_path = JoinPath(_default_log_path, "logs")
+    except:
+        pass
 
     return _default_log_path
 ## end : [SetDefaultLogPath]
-
-
 
 
 def CheckPathExists(path):
@@ -188,6 +194,7 @@ def SetDate():
 
 
 def WalkDirectory(file_source, file_destination):
+    LogToFile(log_type="text", log_title="Walking Directory", log_text="Start the file walk.", log_called_by="WalkDirectory")
     if (file_source != "" and file_destination != ""):
         for dirpath, dnames, fnames in os.walk("./"):
             for f in fnames:
@@ -223,7 +230,7 @@ def MoveFile(source, destination):
 
 
 def IsPathZipped(path):
-    
+    LogToFile(log_type="text", log_title="Zipped", log_text=f"Zipped folder was found", log_called_by="IsPathZipped")
     # if path is zipped
     if (path.endswith(".zip")):
         UnzipFolder(path)    
