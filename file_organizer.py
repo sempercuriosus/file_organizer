@@ -68,7 +68,7 @@ def GetSettings():
             Settings.set("file_destination", _file_desination) 
             Settings.set("log_path", _log_file_path)
             
-            LogToFile(log_type="text", log_title="Configuration Successful", log_text="Loaded configuration file.", log_called_by="GetSettings")
+            LogToFile(log_type="text", log_title="Configuration Successful", log_text="Loaded configuration file.", log_called_by="GetSettings",additional_lines=f"file source : {_file_source} /nfile destination : {_file_desination} /nlog path :{_log_file_path}")
 
     except Exception as e:
         LogToFile(log_type="text", log_title="Configuration Error", log_text="There was an error in loading the configuration file : ", log_called_by="GetSettings()")
@@ -149,7 +149,7 @@ def LogToFile(log_type, log_title, log_text, log_called_by, additional_lines="")
 def SetDefaultLogPath():
 
     try:
-        LogToFile(log_type="text", log_title="Log Path Missing", log_text="The Log file path was not set.", log_called_by="SetDefaultLogPath")
+        # LogToFile(log_type="text", log_title="Log Path Missing", log_text="The Log file path was not set.", log_called_by="SetDefaultLogPath")
 
         _default_log_path = ""
 
