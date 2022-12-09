@@ -68,7 +68,7 @@ def GetSettings():
             Settings.set("file_destination", _file_desination) 
             Settings.set("log_path", _log_file_path)
             
-            LogToFile(log_type="text", log_title="Configuration Successful", log_text="Loaded configuration file.", log_called_by="GetSettings",additional_lines=f"file source : {_file_source} /nfile destination : {_file_desination} /nlog path :{_log_file_path}")
+            LogToFile(log_type="text", log_title="Configuration Successful", log_text="Loaded configuration file.", log_called_by="GetSettings",additional_lines=f"file source : {_file_source} \nfile destination : {_file_desination} \nlog path :{_log_file_path}")
 
     except Exception as e:
         LogToFile(log_type="text", log_title="Configuration Error", log_text="There was an error in loading the configuration file : ", log_called_by="GetSettings()")
@@ -80,6 +80,7 @@ def GetSettings():
 def CheckAppSettingsExists(configuration_file_location):
     
     try:
+        LogToFile(log_type="text", log_title="Settings Exist", log_text="Configuration File Found", log_called_by="CheckAppSettingsExists")
         _file_exists = os.path.isdir(configuration_file_location)
     except Exception as e:
         LogToFile(log_type="error", log_title="Check If appsettings exists.", log_text="There was an issue in checking that appsettings existing ", log_called_by="CheckAppSettingsExists")
@@ -89,7 +90,7 @@ def CheckAppSettingsExists(configuration_file_location):
         "source_path": "",
         "target_path": "",
         "log_path": ""
-    }
+        }
     }"""
     try:
         if _file_exists == False:
